@@ -1,0 +1,16 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    justify-content: center;
+    align-items: center;
+    .button {
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        background-color: rgb(118, 118, 118);
+        color: white;
+    }
+
+}

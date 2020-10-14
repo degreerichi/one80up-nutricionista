@@ -2,6 +2,7 @@
     position: fixed;
     bottom: 15px;
     right: 15px;
+    z-index: 990;
     .chat-button {
         border-radius: 50%;
         background-color: green;
@@ -23,48 +24,48 @@
         animation-name: fadeInLeft;
         animation-duration: 0.3s;
         .chat-item {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                align-items: center;
-                justify-content: center;
-                padding: 8px;
-                border-bottom: 1px solid rgb(233, 233, 233);
-                .chat-item-image {
-                    width: 45px;
-                    height: 45px;
-                    border-radius: 50%;
-                    margin-right: 10px;
-                }
-                .chat-item-info {
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    .chat-window-guest-title {
-                        display: inline-block;
-                        margin: 0;
-                        font-size: 0.8rem;
-                    }
-                    .chat-window-guest-name {
-                        display: inline-block;
-                        margin: 0;
-
-                    }
-                    .chat-window-guest-state {
-                        display: inline-block;
-                        margin: 0;
-                        font-size: 0.6rem;
-                        color:  rgb(128, 128, 128);
-                    }
-                }
-                .chat-item-time {
-                    .chat-item-time-text {
-                        font-size: 0.7rem;
-                        white-space: nowrap;
-                        color:  rgb(128, 128, 128);
-                    }
-                }
-            }
+             display: flex;
+             flex-direction: row;
+             flex-wrap: nowrap;
+             align-items: center;
+             justify-content: center;
+             padding: 8px;
+             border-bottom: 1px solid rgb(233, 233, 233);
+             .chat-item-image {
+                   width: 45px;
+                   height: 45px;
+                   border-radius: 50%;
+                   margin-right: 10px;
+             }
+             .chat-item-info {
+                   width: 100%;
+                   display: flex;
+                   flex-direction: column;
+                   .chat-window-guest-title {
+                      display: inline-block;
+                      margin: 0;
+                      font-size: 0.8rem;
+                   }
+                   .chat-window-guest-name {
+                      display: inline-block;
+                      margin: 0;
+ 
+                   }
+                   .chat-window-guest-state {
+                      display: inline-block;
+                      margin: 0;
+                      font-size: 0.6rem;
+                      color:  rgb(128, 128, 128);
+                   }
+             }
+             .chat-item-time {
+                   .chat-item-time-text {
+                      font-size: 0.7rem;
+                      white-space: nowrap;
+                      color:  rgb(128, 128, 128);
+                   }
+             }
+          }
     }
     
     .chat-window-wrapper {
@@ -73,19 +74,36 @@
         right: 0;
         transform: translateY(-100%);
         .chat-window {
+            position: relative;
             height: 450px;
-            width: 280px;
+            @media only screen and (max-height: 550px){
+             height: calc(100vh - 101px);
+            }
+            width: 320px;
+            @media only screen and (max-width: 380px){
+             width: calc(100vw - 30px);
+            }
             background-color: rgb(247, 247, 247);
             // border: 1px solid rgb(226, 226, 226);
             border-radius: 15px;
             animation-name: fadeInUp;
             animation-duration: 0.3s;
             overflow: hidden;
+            // @include box-shadow(4);
+            .chat-preloader {
+                 position: absolute;
+                 top: 50%;
+                 left: 50%;
+                 transform: translate(-50%, -50%);
+            }
             .chat-window-header {
-                padding: 15px;
+                padding: 5px 15px 5px 15px;
+                height: 83.6px;
+                @media only screen and (max-height: 550px){
+                   padding: 0px 15px 0px 15px;
+                }
                 background-color: rgb(88, 146, 60);
                 border-radius: 15px 15px 0 0;
-                height: 83.6px;
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: row;
@@ -135,21 +153,25 @@
             .chat-window-messages-wrapper {
                 animation-name: fadeInRight;
                 animation-duration: 0.3s;
-                padding: 15px;
+                padding: 15px 15px 15px 15px;
                 display: flex;
                 flex-direction: column-reverse;
-                height: 450px - 83.6px * 2;
+                height: (450px - 85px * 2);
+                @media only screen and (max-height: 550px){
+                   height: calc((100% - 85px * 2));
+                }
                 overflow: auto;
                 .chat-message {
+                    box-sizing: border-box;
                     padding: 5px 10px 5px 10px;
                     background-color:  rgb(197, 247, 197);
                     border-radius: 15px;
                     width: 80%;
-                    align-self: flex-start;
                     margin-bottom: 10px;
+                    align-self: flex-end;
                     &.guest {
+                        align-self: flex-start;
                         background-color:  rgb(230, 230, 230);
-                        align-self: flex-end;
                     }
                     .chat-message-text {
                         margin: 0;
@@ -171,9 +193,14 @@
                 padding: 10px 5px 10px 5px;
                 height: 58px;
                 border-radius: 0 0 15px 15px;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
+                form {
+                     display: flex;
+                     flex-direction: row;
+                     justify-content: center;
+                     flex-wrap: nowrap;
+                     width: 100%;
+                     margin: 0;
+                }
                 .chat-input {
                     width: 100%;
                     border: 1px solid rgb(226, 226, 226);
@@ -183,21 +210,23 @@
                     margin-right: 5px;
                 }
                 .chat-send-button {
-                    padding: 11px;
                     display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-sizing: border-box;
+                    border: none;
+                    padding: 14.1px;
                     color: white;
                     border-radius: 50%;
-                    align-items: center;
                     text-decoration: none;
-                    justify-content: center;
                     background-color:  rgb(47, 117, 47);
                 }
             }
         }
     }
-}
-
-@keyframes fadeInUp {
+ }
+ 
+ @keyframes fadeInUp {
     0% {
         transform: translateY(30px);
         opacity: 0;
@@ -206,10 +235,10 @@
         transform: translateY(0);
         opacity: 1;
     }
-}
-
-
-@keyframes fadeInLeft {
+ }
+ 
+ 
+ @keyframes fadeInLeft {
     0% {
         transform: translateX(-30px);
         opacity: 0;
@@ -218,9 +247,9 @@
         transform: translateX(0);
         opacity: 1;
     }
-}
-
-@keyframes fadeInRight {
+ }
+ 
+ @keyframes fadeInRight {
     0% {
         transform: translateX(30px);
         opacity: 0;
@@ -229,4 +258,12 @@
         transform: translateX(0);
         opacity: 1;
     }
-}
+ }
+
+ .channel-alert {
+     padding: 15px;
+     text-align: center;
+     display: inline-block;
+     font-size: 0.7rem;
+     color: rgb(109, 109, 109);
+ }

@@ -1,11 +1,26 @@
 import React from 'react';
-import "./style/style.scss";
-import { Chat } from "./components/Chat";
+import { Home } from "./components/views/home";
+import { Select } from "./components/views/select";
+import { 
+    BrowserRouter as Router,
+    Route,
+    Switch
+} from "react-router-dom";
 
 function App() {
+
 	return (
 		<div>
-			<Chat/>
+            <Router>
+                <Switch>
+                    <Route path="/chat/:usuario_nutricionista">
+                        <Home/>
+                    </Route>
+                    <Route path="/">
+                        <Select/>
+                    </Route>
+                </Switch>
+            </Router>
 		</div>
 	);
 }

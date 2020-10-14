@@ -1,0 +1,1 @@
+export const GET_CHAT_USUARIO_ROUTE = (usuario) => {return `/chat/${usuario}`};
