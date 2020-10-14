@@ -119,10 +119,9 @@ function Home() {
 
 	}
 
-	let randomNumber = (min, max) => {
-        return Math.random() * (max - min) + min;
-	}
-	
+	// let randomNumber = (min, max) => {
+    //     return Math.random() * (max - min) + min;
+	// }
     
     let onMessageReceived = (message)=>{
         pushMessageToState(message);
