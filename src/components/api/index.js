@@ -1,8 +1,8 @@
 import Axios from "axios";
 
 const PROTOCOL = "https";
-const HOST = `${PROTOCOL}://api.one80uplocal.com`;
-// export const HOST = `${PROTOCOL}://one80up-backend.herokuapp.com`;
+// const HOST = `${PROTOCOL}://api.one80uplocal.com`;
+export const HOST = `${PROTOCOL}://one80up-backend.herokuapp.com`;
 
 const GET_CHAT_TOKEN = `${HOST}/api/generate_token_nutricionista`;
 const GET_USUARIO_CHAT_INFO = `${HOST}/api/get_usuario_chat_info`;
