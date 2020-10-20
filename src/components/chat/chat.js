@@ -25,7 +25,9 @@ export type ChatProps = {
     messages: Array<MessageProps>,
     otherprops: string,
     onMessageSent: mixed,
-    onChatChange: mixed
+    onChatChange: mixed,
+    onAnyChatReturn: mixed,
+    unreadMessagesStatus: Arrray<number>
 };
 
 
@@ -49,7 +51,7 @@ export function Chat(props: ChatProps) {
 
     let vistaChats = (
         <div className="chat-list-wrapper">
-            {props.chatList.length > 0 ? props.chatList.map((c, i)=>{
+            {props.chatList.length > 0 && props.chatList.map((c, i)=>{
                 return (
                     <div className="chat-item" onClick={()=>{vistaChatsHandler(i, 1)}} key={i}>
                         <img className="chat-item-image" src={c.imagen} alt=""/>
@@ -58,14 +60,14 @@ export function Chat(props: ChatProps) {
                             <span className="chat-window-guest-name">{c.nombre}</span>
                             <span className="chat-window-guest-state">{c.estado}</span>
                         </div>
-                        <div className="chat-item-time">
-                            <span className="chat-item-time-text">{c.hora}</span>
-                        </div>
+                        {props.unreadMessagesStatus[chatActivo] > 0 && (
+                            <div className="chat-item-badge">
+                                <span className="chat-item-badge-text">{props.unreadMessagesStatus[chatActivo]}</span>
+                            </div>
+                        )}
                     </div>
                 );
-            }) : (
-                <span className="channel-alert">Parece que no tiene ningún canal de comunicación.</span>
-            )}
+            })}
         </div>
     );
 
@@ -89,18 +91,25 @@ export function Chat(props: ChatProps) {
             chatWindow.current.scrollTo(0, 0);
     }
 
+    let returnToChatList = ()=>{
+        vistaChatsHandler(0, 0);
+        if(props.onAnyChatReturn !== null 
+        && props.onAnyChatReturn !== undefined
+        && typeof props.onAnyChatReturn === "function") props.onAnyChatReturn();
+    }
+
     let vistaChat = (
         <>
             {props.chatList.length > 0 && props.chatList[chatActivo] !== null && (
                 <>
                     <div className="chat-window-header" chatactivo={chatActivo}>
-                        <a href="#!" className="chat-return-button" onClick={()=>{vistaChatsHandler(0, 0)}}>
+                        <a href="#!" className="chat-return-button" onClick={returnToChatList}>
                             <FontAwesomeIcon icon={faChevronLeft}/>
                         </a>
                         <div className="chat-window-guest-data">
                             <img className="chat-window-image" src={props.chatList[chatActivo].imagen} alt=""/>
                             <div className="chat-window-guest-info">
-                                <span className="chat-window-guest-title">{props.chatList[chatActivo].titulo}</span>
+                                <span className="chat-window-guest-title">Nutricionista</span>
                                 <span className="chat-window-guest-name">{props.chatList[chatActivo].nombre}</span>
                                 <span className="chat-window-guest-state">{props.chatList[chatActivo].estado}</span>
                             </div>
@@ -156,11 +165,25 @@ export function Chat(props: ChatProps) {
 		<span className="chat-button-icon">
 			<FontAwesomeIcon icon={faTimes} size="lg"/>
 		</span>
-	)
+    )
+
+    let unreadMessagesBadge = (
+        Array.isArray(props.unreadMessagesStatus) 
+        ? (
+            props.unreadMessagesStatus.length > 0
+                ? props.unreadMessagesStatus.reduce((n, i) => {
+                    return n + i;
+                }, 0) > 0 ? <span className="chat-button-badge">{props.unreadMessagesStatus.reduce((n, i) => {
+                    return n + i;
+                }, 0)}</span> : ""
+                : ""
+        ) : ""
+    );
 
 	let button = (
 		<a href="#!" className="chat-button" onClick={toggleChat}>
 			{!chatOpened ? openIcon : closeIcon}
+            {unreadMessagesBadge}
 		</a>
 	);
 

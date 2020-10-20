@@ -1,5 +1,6 @@
 import Axios from "axios";
 
+// const PROTOCOL = "http";
 const PROTOCOL = "https";
 // const HOST = `${PROTOCOL}://api.one80uplocal.com`;
 export const HOST = `${PROTOCOL}://one80up-backend.herokuapp.com`;
