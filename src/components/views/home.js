@@ -9,6 +9,7 @@ import TwilioChat from "twilio-chat";
 import moment from "moment";
 import { useParams, Link } from "react-router-dom";
 import "../../styles/home.scss";
+import imageCompression from 'browser-image-compression';
 
 // const user = {
 // 	usuario: 'mhelena'
@@ -123,7 +124,9 @@ function Home() {
                 texto: m.state.body,
                 emisor: m.state.author,
                 guest: m.state.author !== usuario_nutricionista,
-                hora: moment(m.state.timestamp).format('MMM dd, yyyy hh:mm a')
+                hora: moment(m.state.timestamp).format('MMM dd, yyyy hh:mm a'),
+                type: m.state.type,
+                media: m.type === "media" ? m.media.getContentTemporaryUrl() : null
             }
         });
 
@@ -192,7 +195,9 @@ function Home() {
             texto: m.state.body,
             emisor: m.state.author,
             guest: m.state.author !== usuario_nutricionista,
-            hora: moment(m.state.timestamp).format('MMM dd, yyyy hh:mm a')
+            hora: moment(m.state.timestamp).format('MMM dd, yyyy hh:mm a'),
+            type: m.state.type,
+            media: m.type === "media" ? m.media.getContentTemporaryUrl() : null
         });
 
         setMessages(newMessages);
@@ -210,6 +215,43 @@ function Home() {
                 updateUnreadMessages(n, chatActive);
             });
         });
+    }
+
+    const sendImageToChannel = (channel, file)=>{
+        
+        let formData = new FormData();
+        formData.append('file', file);
+
+        channel.sendMessage(formData);
+    
+    }
+
+    let handleImageChange = (image)=>{
+
+        const settings = {
+            maxSizeMB: 1.5,
+            maxWidthOrHeight: 1024
+        }
+
+        imageCompression(image, settings).then((blob_image)=>{
+            // Convertimos la imagen blob a File para poder enviarla por twilio
+            imageCompression.getDataUrlFromFile(blob_image).then((base64)=>{
+
+                imageCompression.getFilefromDataUrl(base64).then((file)=>{
+                    sendImageToChannel(chats[chatActive].twilioChannel, file);
+                }).catch((err)=>{
+                    console.log(err);
+
+                });
+
+            }).catch((err)=>{
+                console.log(err);
+            });
+
+        }).catch((err)=>{
+            console.log(err);
+        });
+
     }
 	
 	useEffect(()=>{
@@ -239,7 +281,8 @@ function Home() {
 				loading={loadingChatToken || loadingChats} 
 				chatList={chats}
 				messages={messages}
-                onAnyChatReturn={onChatReturnHandler}/>
+                onAnyChatReturn={onChatReturnHandler}
+                onImageSelect={handleImageChange}/>
 		</div>
 	);
 }

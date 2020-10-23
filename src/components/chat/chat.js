@@ -1,14 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
-import { faTimes, faChevronLeft, faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faChevronLeft, faCircleNotch, faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { Message } from "./message";
 
 export type MessageProps = {
     texto: string,
     emisor: string,
     guest: boolean,
-    hora: string
+    hora: string,
+    type: "text"|"media",
+    media: Promise<url>
 }
 
 export type ChatListItem = {
@@ -27,7 +29,8 @@ export type ChatProps = {
     onMessageSent: mixed,
     onChatChange: mixed,
     onAnyChatReturn: mixed,
-    unreadMessagesStatus: Arrray<number>
+    unreadMessagesStatus: Arrray<number>,
+    onImageSelect: mixed
 };
 
 
@@ -98,6 +101,25 @@ export function Chat(props: ChatProps) {
         && typeof props.onAnyChatReturn === "function") props.onAnyChatReturn();
     }
 
+    let handleFileButton = ()=>{
+        getImage().then((image)=>{
+            if(props.onImageSelect !== undefined 
+                && typeof props.onImageSelect === "function") props.onImageSelect(image);
+        });
+    }
+
+    let getImage = async ()=>{
+        return new Promise((resolve)=>{
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.addEventListener('change', ()=>{
+                resolve(input.files[0]);
+            });
+            input.click();
+        });
+    }
+
     let vistaChat = (
         <>
             {props.chatList.length > 0 && props.chatList[chatActivo] !== null && (
@@ -114,6 +136,9 @@ export function Chat(props: ChatProps) {
                                 <span className="chat-window-guest-state">{props.chatList[chatActivo].estado}</span>
                             </div>
                         </div>
+                        <a href="#!" className="chat-file-send" onClick={handleFileButton}>
+                            <FontAwesomeIcon icon={faPaperclip} size="lg"/>
+                        </a>
                     </div>
                     <div className="chat-window-messages-wrapper" ref={chatWindow}>
                         {messages}

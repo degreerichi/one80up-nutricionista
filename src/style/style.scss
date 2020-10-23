@@ -139,6 +139,7 @@
                     padding-right: 10px;
                 }
                 .chat-window-guest-data {
+                    flex: 1;
                     display: flex;
                     flex-direction: row;
                     align-items: center;
@@ -246,6 +247,23 @@
         }
     }
  }
+
+ 
+.chat-file-send {
+    padding: 10px 5px 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    &:active, &:hover {
+        color: white;
+    }
+}
+
+.w-100 {
+    width: 100%;
+}
  
  @keyframes fadeInUp {
     0% {
