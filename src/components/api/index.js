@@ -1,10 +1,10 @@
 import Axios from "axios";
 import { TOKEN } from "../../strings";
 
-const PROTOCOL_UNSECURE = "http";
-// const PROTOCOL_SECURE = "https";
+// const PROTOCOL_UNSECURE = "http";
+const PROTOCOL_SECURE = "https";
 // const HOST = `${PROTOCOL_UNSECURE}://api.one80uplocal.com`;
-export const HOST = `${PROTOCOL}://one80up-backend.herokuapp.com`;
+export const HOST = `${PROTOCOL_SECURE}://one80up-backend.herokuapp.com`;
 
 const API_BASE = `${HOST}/api`;
 const API_AUTH_BASE = `${HOST}/api/nutricionista`;
