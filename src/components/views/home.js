@@ -3,13 +3,17 @@ import "../../style/style.scss";
 import { Chat } from "../chat";
 import { 
 	GetChatToken, 
-	GetUsuarioChatInfo 
+    GetUsuarioChatInfo,
+    GetUserAuth
 } from "../api";
 import TwilioChat from "twilio-chat";
 import moment from "moment";
-import { useParams, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "../../styles/home.scss";
 import imageCompression from 'browser-image-compression';
+import { useSelector, useDispatch } from "react-redux";
+import { logout, clearUser } from "../redux/actions/authActions";
+import { TOKEN } from "../../strings";
 
 // const user = {
 // 	usuario: 'mhelena'
@@ -23,7 +27,10 @@ function Home() {
     let [messages, setMessages] = useState([]);
     let [chatActive, setChatActive] = useState(0);
     let [unreadMessages, setUnreadMessages] = useState([]);
-    let { usuario_nutricionista } = useParams();
+    // let { usuario_nutricionista } = useParams();
+    let usuario_nutricionista = useSelector(state => state.user);
+    let dispatch = useDispatch();
+    let history = useHistory();
 	
 	async function setupTwilioClient(c){
 
@@ -255,19 +262,31 @@ function Home() {
     }
 	
 	useEffect(()=>{
-		GetChatToken({ usuario: usuario_nutricionista }).then((res)=>{
-            TwilioChat.create(res.data.token).then(c => setupTwilioClient(c));
-            setLoadingChatToken(false);
-        }).catch((err)=>{
-            console.log('fallo aca');
-            console.log(err);
-		});
+        GetUserAuth().then((res)=>{
+            GetChatToken({ usuario: res.data.user }).then((res)=>{
+                TwilioChat.create(res.data.token).then(c => setupTwilioClient(c));
+                setLoadingChatToken(false);
+            }).catch((err)=>{
+                console.log(err);
+            });
+        });
 		// eslint-disable-next-line
-	}, []);
+    }, []);
+    
+    const logoutAction = ()=>{
+
+        localStorage.removeItem(TOKEN);
+        dispatch(logout());
+        dispatch(clearUser());
+        setTimeout(()=>{
+            history.push("/login");
+        }, 500);
+
+    }
 
 	return (
 		<div className="home">
-            <Link className="button" to="/">Regresar</Link>
+            <a href="#!" onClick={logoutAction} className="button">Cerrar Sesión</a>
             <br/>
             <h2>Instrucciones</h2>
             <p>

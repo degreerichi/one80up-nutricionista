@@ -1,19 +1,27 @@
 import Axios from "axios";
+import { TOKEN } from "../../strings";
 
-// const PROTOCOL = "http";
-const PROTOCOL = "https";
-// const HOST = `${PROTOCOL}://api.one80uplocal.com`;
+const PROTOCOL_UNSECURE = "http";
+// const PROTOCOL_SECURE = "https";
+// const HOST = `${PROTOCOL_UNSECURE}://api.one80uplocal.com`;
 export const HOST = `${PROTOCOL}://one80up-backend.herokuapp.com`;
 
-const GET_CHAT_TOKEN = `${HOST}/api/generate_token_nutricionista`;
-const GET_USUARIO_CHAT_INFO = `${HOST}/api/get_usuario_chat_info`;
-const GET_NUTRICIONISTAS_USERS = `${HOST}/api/get_nutricionistas_users`;
+const API_BASE = `${HOST}/api`;
+const API_AUTH_BASE = `${HOST}/api/nutricionista`;
+
+export const CHECK_AUTH = `${API_AUTH_BASE}/check`;
+export const LOGIN = `${API_AUTH_BASE}/login`;
+const GET_CHAT_TOKEN = `${API_BASE}/generate_token_nutricionista`;
+const GET_USUARIO_CHAT_INFO = `${API_BASE}/get_usuario_chat_info`;
+const GET_NUTRICIONISTAS_USERS = `${API_BASE}/get_nutricionistas_users`;
+const GET_USER_AUTH = `${API_AUTH_BASE}/get_user_auth`;
 
 // Default headers
 const getHeaders = ()=>{
     return {
         "Content-type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem(TOKEN)}`
     }
 }
 
@@ -52,4 +60,8 @@ export const GetUsuarioChatInfo = (data)=>{
 
 export const GetNutricionistasUsers = ()=>{
     return GetResponseFromApi(GET_NUTRICIONISTAS_USERS, "get");
+}
+
+export const GetUserAuth = ()=>{
+    return GetResponseFromApi(GET_USER_AUTH, "get");
 }

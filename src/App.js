@@ -1,11 +1,14 @@
 import React from 'react';
 import { Home } from "./components/views/home";
-import { Select } from "./components/views/select";
+// import { Select } from "./components/views/select";
+import { Login } from "./components/views/authentication";
 import { 
     BrowserRouter as Router,
-    Route,
+    Redirect,
+    // Route,
     Switch
 } from "react-router-dom";
+import { ProtectedRoute, RedirectIfAuthenticated } from "./components/auth/auth";
 
 function App() {
 
@@ -13,12 +16,15 @@ function App() {
 		<div>
             <Router>
                 <Switch>
-                    <Route path="/chat/:usuario_nutricionista">
+                    <ProtectedRoute path="/chat">
                         <Home/>
-                    </Route>
-                    <Route path="/">
-                        <Select/>
-                    </Route>
+                    </ProtectedRoute>
+                    <RedirectIfAuthenticated path="/login">
+                        <Login/>
+                    </RedirectIfAuthenticated>
+                    <ProtectedRoute path="/">
+                        <Redirect to="/chat"/>
+                    </ProtectedRoute>
                 </Switch>
             </Router>
 		</div>
